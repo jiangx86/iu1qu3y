@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>荻语转换</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400..900&family=Noto+Sans+SC:wght@400..900&display=swap">
+<style>
+:root{--red:#ff2020;--blk:#000;--wht:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;border-radius:0}
+html,body{margin:0;background:var(--wht);color:var(--blk)}
+body{font-family:var(--ff);overflow-x:hidden}
+body[data-l=zh]{--ff:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;--fs:44vw;--lh:1;--ln:1;--y:1.5}
+body[data-l=ja]{--ff:"Noto Sans JP","Hiragino Sans",sans-serif;--fs:44vw;--lh:1;--ln:1;--y:1.5}
+body[data-l=en]{--ff:Anton,Impact,sans-serif;--fs:27vw;--lh:1;--ln:1;--y:2.2}
+body[data-l=di]{--ff:"Times New Roman",Times,serif;--fs:27vw;--lh:.9;--ln:2;--y:1.35}
+#bar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 8px;background:transparent}
+#ttl{font-weight:900;font-size:21px;display:inline-block;transform:scaleY(1.3);transform-origin:left center}
+#bg{background:none;border:0;padding:6px 0}
+#bg i{display:block;width:34px;height:6px;background:var(--blk);margin:6px 0}
+#bg i:nth-child(2){transform:translateX(-6px)}
+#menu{display:none;position:fixed;inset:0;z-index:10;background:var(--red);flex-direction:column;justify-content:center;padding:60px 4vw 20px}
+#menu.on{display:flex}
+.it{display:flex;align-items:center;gap:4vw;padding:1vw 0 1vw 3vw;border-left:3vw solid transparent;cursor:pointer}
+.it.a{border-left-color:var(--blk)}
+.fl{width:15vw;height:15vw;border:3px solid var(--blk);flex:none;overflow:hidden;background:var(--wht)}
+.fl svg,.fl img{width:100%;height:100%;display:block;object-fit:cover}
+.lb{font-size:15vw;font-weight:900;line-height:1.1;display:inline-block;transform:scaleY(1.25);transform-origin:left center;color:var(--blk)}
+#hero{overflow:hidden;margin-top:calc(env(safe-area-inset-top,0px) + 54px);height:calc(var(--fs) * var(--lh) * var(--ln) * var(--y));color:var(--red);cursor:pointer}
+#big{font-size:var(--fs);line-height:var(--lh);font-weight:900;white-space:nowrap;transform:scaleY(var(--y));transform-origin:0 0;margin-left:-1vw}
+.sm{font-family:"Times New Roman",Times,serif}
+#tip{margin:6px 4vw 0;font-size:13px}
+section{padding:0 4vw}
+.lab{font-size:13px;margin:18px 0 4px}
+textarea{display:block;width:100%;min-height:26vw;border:2px solid var(--blk);background:var(--wht);color:var(--blk);font:20px/1.4 var(--ff);padding:10px;resize:none;outline:0}
+textarea:focus{border-color:var(--red)}
+#arr{display:block;width:100%;height:26vw;margin:10px 0}
+#out{background:var(--blk);color:var(--wht);min-height:26vw;padding:12px;font-size:22px;line-height:1.5;word-break:break-all;white-space:pre-wrap;border:2px solid var(--blk)}
+#out .c{border-bottom:2px solid var(--red);cursor:pointer}
+#out .p{display:block;font:12px/1.4 "Times New Roman",serif;margin-top:8px;word-break:break-word}
+#note{font-size:12px;margin-top:6px}
+#cp{font-size:20vw;font-weight:900;line-height:1;color:var(--red);transform:scaleY(1.4);transform-origin:0 0;margin:10px 0 calc(20vw * .5);cursor:pointer;display:inline-block}
+#ft{text-align:center;font-size:12px;padding:20px 0 24px}
+body[data-l=zh],body[data-l=ja]{--fs:28vw;--lh:1;--ln:1;--y:4;--wt:600}
+body[data-l=en]{--fs:19vw;--lh:1;--ln:1;--y:4.6;--wt:400}
+body[data-l=di]{--fs:23vw;--lh:.95;--ln:2;--y:2.6;--wt:700}
+#ttl{font-size:26px;font-weight:700;transform:none}
+#bg{display:flex;gap:11px;padding:8px 2px}
+#bg i{width:7px;height:28px;margin:0;transform:skewX(-24deg)}
+#bg i:nth-child(2){transform:skewX(-24deg)}
+#hero{cursor:default;text-align:center;margin-top:calc(env(safe-area-inset-top,0px) + 50px)}
+#big{font-weight:var(--wt);margin:0;transform-origin:50% 0}
+#fan{display:block;width:100%;height:auto;margin-top:6vw}
+.lab{font-size:5vw;font-weight:700;margin:6vw 0 2vw 4vw}
+#arr{display:block;width:55vw;height:auto;margin:10vw auto 12vw}
+#row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:3vw}
+#cp{font-size:7vw;font-weight:700;line-height:1.2;transform:none;margin:0 4vw 0 0;display:flex;align-items:center;gap:1.5vw;color:var(--red);cursor:pointer}
+#dirb{display:flex;align-items:center;gap:4vw;background:none;border:0;padding:0;margin:14vw 0 0 2vw;cursor:pointer;font:inherit;color:var(--blk);text-align:left}
+#ring{width:20vw;height:20vw;border:2vw solid var(--red);border-radius:50%;flex:none}
+#dl{font-size:6.2vw;font-weight:700;margin-top:5vw}
+#dv{display:flex;align-items:center;margin:14vw 7.4vw 0}
+#dv i{flex:1;height:3px;background:#c4c4c4}
+#dv i:first-child{transform:translateY(-2px)}
+#dv i:last-child{transform:translateY(3px)}
+#dv b{width:10px;height:10px;border-radius:50%;background:#c4c4c4;margin:0 12vw;flex:none}
+#gap{background:#5a5a5a;min-height:50vw;margin-top:8vw}
+.it{height:28vw;padding-top:0;padding-bottom:0}
+.fl{width:18vw;height:18vw}
+.lb{font-size:11vw;font-weight:600;transform:scaleY(2.4)}
+.it[data-l=en] .lb{font-weight:400}
+.it[data-l=di] .lb{font-weight:700}
+#row{justify-content:flex-end;margin-top:4vw}
+#cp{height:13vw;padding:0 3.5vw;border:2px solid var(--red);gap:1vw;font-size:6vw;margin-right:4vw}
+#cp svg,#cpt{display:inline-block;transform:scaleY(1.8)}
+#cp svg{width:3.5vw;height:auto}
+#dirb{gap:3vw;margin:9vw 0 0 4vw}
+#ring{width:11vw;height:11vw;border-width:1.3vw}
+#dirb svg{margin-right:-2vw}
+#dl{font-size:3.6vw;font-weight:400;margin:0;max-width:23vw;line-height:1.15;transform:scaleY(1.8);transform-origin:left center}
+#cp{height:10vw;padding:0 2.6vw;font-size:4vw;color:#555;border-color:#555;gap:.8vw}
+#cp svg{width:2.4vw}
+#cp svg path{stroke:#555}
+#dl{word-break:break-all}
+::selection{background:var(--red);color:#fff}
+body::before{content:"";position:fixed;inset:0;z-index:30;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.4 -.2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+#meta{display:flex;justify-content:space-between;margin:7vw 4vw 0;padding-top:1.6vw;border-top:2px solid var(--blk);font:3vw/1 "Times New Roman",serif;letter-spacing:.08em}
+
+textarea::placeholder{color:#b8b8b8}
+#ring:active{background:var(--red)}
+#cp:active{background:#555;color:#fff}
+#menu{counter-reset:n}
+.it::after{content:counter(n,decimal-leading-zero);counter-increment:n;margin-left:auto;align-self:flex-start;padding:5vw 4vw 0 0;font:3vw/1 "Times New Roman",serif;letter-spacing:.1em}
+</style></head>
+<body data-l="zh">
+<div id="bar"><span id="ttl"></span><button id="bg" aria-label="menu"><i></i><i></i><i></i></button></div>
+<div id="menu"></div>
+<div id="hero"><div id="big"></div></div>
+<svg id="fan" viewBox="0 0 1190 600"><g stroke="#ff2020" stroke-width="11" fill="none"><path d="M452 10L285 538"/><path d="M594 25V585"/><path d="M755 8L910 512"/></g></svg>
+<div id="meta"><span>No.006</span></div>
+<section>
+<div class="lab sm" id="inL"></div>
+<textarea id="in"></textarea>
+<svg id="arr" viewBox="0 0 662 285"><polygon points="226,0 438,0 438,150 662,150 331,285 0,150 226,150" fill="#ff0000"/></svg>
+<div class="lab sm" id="outL"></div>
+<div id="out"></div>
+<div id="row"><div id="cp"><svg width="22" height="28" viewBox="0 0 22 28"><path d="M18 2V20H4M9 14L3 20L9 26" fill="none" stroke="#ff2020" stroke-width="2.5"/></svg><span id="cpt"></span></div></div>
+<button id="dirb"><span id="ring"></span><svg viewBox="0 0 70 48" style="width:4.5vw;height:auto"><polygon points="0,24 26,0 26,14 70,14 70,34 26,34 26,48" fill="#000"/></svg><span id="dl"></span></button>
+</section>
+<div id="dv"><i></i><b></b><i></i></div>
+<div id="gap"></div>
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},L='zh',dir=0,OUT='',items=null;
+try{L=localStorage.getItem('diyu_l')||'di'}catch(e){}
+var T={
+zh:{title:'荻语转换',big:['转换','解码'],tip:'点大字换方向',inL:['中文','荻语'],outL:['荻语','中文'],ph:['输入中文','输入荻语'],note:['声母去后面','汉字是猜的,点字换同音字'],dir:'更换方向',copy:'复制',done:'已复制',fail:'复制失败',foot:'荻语'},
+en:{title:'DIYU CONVERT',big:['CONVERT','DECODE'],tip:'TAP THE BIG WORD TO FLIP',inL:['CHINESE','DIYU'],outL:['DIYU','CHINESE'],ph:['TYPE CHINESE','TYPE DIYU'],note:['INITIAL GOES TO THE BACK','HANZI ARE GUESSES. TAP A CHAR TO SWAP'],dir:'FLIP DIRECTION',copy:'COPY',done:'COPIED',fail:'COPY FAILED',foot:'DIYU'},
+ja:{title:'荻語変換',big:['変換','解読'],tip:'大きい字をタップで切替',inL:['中国語','荻語'],outL:['荻語','中国語'],ph:['中国語を入力','荻語を入力'],note:['声母は後ろへ','漢字は推測。字をタップで同音字に切替'],dir:'方向を変更',copy:'コピー',done:'コピー済',fail:'コピー失敗',foot:'荻語'}};
+var COMMON='的一是不了人我在有他这中大来上国个到说们为子和你地出道也时年得就那要下以生会自着去之过家学对可她里后小么心多天而能好都然没日于起还发成事只作当想看文无开手十用主行方又如前所本见经头面公同三已老从动两长知民样现分将外但身些与高意进把法此实回二理美点月明其种声全工话儿者向情部正名定女问力机给等几很业最间新什写应位因适世常并张表重被谁相总关先口加内门化信吗吧啊呢吃喝爱恨笑哭死活白黑红听字荻语换码转解狗猫鱼鸟花草树山河海风雨雪云星火土金木电车路钱饭水酒茶懂帅丑累困饿冷热痛喜欢讨厌朋友妈爸哥姐弟妹孩男死杀滚傻笨蠢烦真假对错别再让给跟比更太哪怎吗每又才';
+var ONS=/^(zh|ch|sh|[bpmfdtnlgkhjqxrzcsyw])(.+)$/;
+function norm(p){p=p.replace(/ü/g,'v');return /\d$/.test(p)?p:p+'5'}
+function ep(p){p=norm(p);var m=p.match(ONS);return m?m[2]+m[1]:p}
+var PUNC={
+ '，':',','。':'.','！':'!','？':'?','、':',','；':';','：':':',
+ '…':'...','「':'"','」':'"','『':'"','』':'"','（':'(','）':')',
+ '【':'[','】':']','《':'<','》':'>','—':'-','－':'-','～':'~'
+};
+var PU=/^[,\.?!;:…"'()\[\]<>\-~]+$/;
+function latinPunctuation(t){
+ return t.replace(/[，。！？、；：…「」『』（）【】《》—－～]/g,function(c){return PUNC[c]||c});
+}
+function jn(o){
+ var r='';
+ o.forEach(function(k,i){
+  if(!i){r=k;return}
+  if(PU.test(k)){r+=k;return}
+  if(PU.test(o[i-1])){r+=k;return}
+  r+='.'+k;
+ });
+ return r;
+}
+function enc(t){
+ if(!window.pinyinPro)return latinPunctuation(t);var o=[];t=latinPunctuation(t)
+   .replace(/(\d{4})年(\d{1,2})月(\d{1,2})[日号]?/g,'$1.$2.$3')
+   .replace(/(\d{4})年(\d{1,2})月/g,'$1.$2')
+   .replace(/(\d{1,2})月(\d{1,2})[日号]/g,'$1.$2');
+ t.split(/([\u4e00-\u9fff]+)/).forEach(function(s){
+  if(!s)return;
+  if(/[\u4e00-\u9fff]/.test(s))pinyinPro.pinyin(s,{toneType:'num',type:'array'}).forEach(function(p){o.push(ep(p))});
+  else{var x=s.trim();if(x)o.push(x)}
+ });return jn(o)}
+var REV=null,FULL=false;
+function add(c){var r;try{r=pinyinPro.pinyin(c,{toneType:'num',multiple:true})}catch(e){return}
+ String(r).split(' ').forEach(function(p){p=norm(p);var a=REV[p]=REV[p]||[];if(a.indexOf(c)<0)a.push(c)})}
+function build(){if(REV||!window.pinyinPro)return;REV={};COMMON.split('').forEach(add)}
+function full(){if(FULL)return;FULL=true;for(var c=0x4e00;c<=0x9fa5;c++)add(String.fromCharCode(c))}
+function cands(p){build();if(!REV)return[];if(!REV[p]){full()}return REV[p]||[]}
+var R=/([a-zv]+?)(\d)(zh|ch|sh|[bpmfdtnlgkhjqxrzcsyw]?)/gi;
+function parse(t){
+ var it=[];t=t.replace(/([，。！？、；：,!?;:…「」『』（）()])/g,' $1 ');
+ t.split(/[\s.]+/).forEach(function(w){
+  if(!w)return;if(/^\d+$/.test(w)){if(it.length&&it[it.length-1].num)it.push({raw:'.'});it.push({raw:w,num:true});return}var ms=[],m,n=0;R.lastIndex=0;
+  while((m=R.exec(w))){ms.push(m);n+=m[0].length;if(m[0].length==0)R.lastIndex++}
+  if(ms.length&&n==w.length){ms.forEach(function(m){var p=(m[3]+m[1]+m[2]).toLowerCase(),c=cands(p);it.push({p:p,c:c,i:0})})}
+  else it.push({raw:w});
+ });return it}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function showOut(){
+ var h='',txt='',py=[];
+ items.forEach(function(x,k){
+  if(x.raw){h+=esc(x.raw);txt+=x.raw;return}
+  py.push(x.p);
+  if(x.c.length){var c=x.c[x.i];h+='<span class="c" data-k="'+k+'">'+c+'</span>';txt+=c}
+  else{h+=esc(x.p);txt+=x.p}
+ });
+ OUT=txt;$('out').innerHTML=h+(py.length?'<span class="p">'+esc(py.join(' '))+'</span>':'');
+}
+function run(){
+ var v=$('in').value;
+ if(dir==0){items=null;OUT=enc(v);$('out').textContent=OUT}
+ else{items=parse(v);showOut()}
+}
+function S(k){
+ if(L=='di'){var z=T.zh[k];return Array.isArray(z)?z.map(enc):enc(z)}
+ return T[L][k]}
+function render(){
+ document.body.setAttribute('data-l',L);
+ $('ttl').textContent=S('title');
+ $('big').innerHTML=esc(S('big')[dir]).replace(/[ .]/g,'<br>');
+ $('dl').textContent='『'+S('dir')+'』';
+ $('inL').textContent='* '+S('inL')[dir];$('outL').textContent='* '+S('outL')[dir];
+ $('in').placeholder=S('ph')[dir];
+ $('cpt').textContent=S('copy');
+ run();
+}
+function flip(){var o=OUT;dir^=1;$('in').value=o||'';render()}
+function star(cx,cy,r,rot){var p=[];for(var k=0;k<10;k++){var a=(-90+k*36+rot)*Math.PI/180,R=k%2?r*.382:r;p.push((cx+R*Math.cos(a)).toFixed(2)+','+(cy+R*Math.sin(a)).toFixed(2))}return '<polygon points="'+p.join(' ')+'" fill="#ffde00"/>'}
+var FL={
+zh:'<svg viewBox="0 0 20 20"><rect width="20" height="20" fill="#de2910"/>'+star(5,5,3,0)+star(10,2,1,23.04)+star(12,4,1,45.87)+star(12,7,1,-2.05)+star(10,9,1,20.66)+'</svg>',
+en:'<svg viewBox="0 0 60 60" preserveAspectRatio="none"><rect width="60" height="60" fill="#012169"/><path d="M0 0L60 60M60 0L0 60" stroke="#fff" stroke-width="10"/><path d="M0 0L60 60M60 0L0 60" stroke="#c8102e" stroke-width="4"/><path d="M30 0V60M0 30H60" stroke="#fff" stroke-width="16"/><path d="M30 0V60M0 30H60" stroke="#c8102e" stroke-width="9"/></svg>',
+ja:'<svg viewBox="0 0 30 30"><rect width="30" height="30" fill="#fff"/><circle cx="15" cy="15" r="8" fill="#ff2020"/></svg>',
+di:'<img alt="" src="data:image/jpeg;base64,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">'};
+var LG=[['zh','中文','zh'],['en','English','en'],['ja','日本語','ja'],['di','荻语','di']];
+var FF={zh:'"Noto Sans SC",sans-serif',en:'Anton,Impact,sans-serif',ja:'"Noto Sans JP",sans-serif',di:'"Times New Roman",serif'};
+function menu(){
+ $('menu').innerHTML=LG.map(function(g){return '<div class="it'+(g[0]==L?' a':'')+'" data-l="'+g[0]+'"><div class="fl">'+FL[g[0]]+'</div><span class="lb" style="font-family:'+FF[g[0]]+'">'+g[1]+'</span></div>'}).join('');
+}
+$('bg').onclick=function(){var m=$('menu');menu();m.classList.toggle('on')};
+$('menu').onclick=function(e){var t=e.target.closest('.it');if(!t)return;L=t.getAttribute('data-l');try{localStorage.setItem('diyu_l',L)}catch(x){}$('menu').classList.remove('on');render()};
+$('dirb').onclick=flip;
+$('in').oninput=run;
+$('out').onclick=function(e){var c=e.target.closest('.c');if(!c||!items)return;var x=items[+c.getAttribute('data-k')];if(x.c.length>1){x.i=(x.i+1)%x.c.length;showOut()}};
+function fallbackCopy(text){
+ var ta=document.createElement('textarea');
+ ta.value=text;
+ ta.setAttribute('readonly','');
+ ta.style.position='fixed';
+ ta.style.left='-9999px';
+ ta.style.top='0';
+ ta.style.opacity='0';
+ document.body.appendChild(ta);
+ ta.focus();
+ ta.select();
+ ta.setSelectionRange(0,ta.value.length);
+ var ok=false;
+ try{ok=document.execCommand('copy')}catch(e){ok=false}
+ document.body.removeChild(ta);
+ return ok;
+}
+$('cp').onclick=async function(){
+ var b=$('cpt'),ok=false;
+ try{
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+   await navigator.clipboard.writeText(OUT);
+   ok=true;
+  }
+ }catch(e){ok=false}
+ if(!ok)ok=fallbackCopy(OUT);
+ b.textContent=ok?S('done'):S('fail');
+ setTimeout(function(){b.textContent=S('copy')},1200);
+};
+
+render();
+window.addEventListener('load',render);
+</script>
+</body></html>
